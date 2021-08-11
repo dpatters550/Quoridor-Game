@@ -20,7 +20,7 @@ class QuoridorGame:
              fences will be tracked by the player_1_fence and player_2_fence data members.Those two data members will 
              decrease when the corresponding player places a fence. """
         self._board = [
-                    [ [], [], [], [], [p1], [], [], [], []],
+                    [ ["f"], [], [], [], [p1], [], [], [], ["f"]],
                     [ [], [], [], [], [], [], [], [], []],
                     [ [], [], [], [], [], [], [], [], []],
                     [ [], [], [], [], [], [], [], [], []],
@@ -28,24 +28,23 @@ class QuoridorGame:
                     [ [], [], [], [], [], [], [], [], []],
                     [ [], [], [], [], [], [], [], [], []],
                     [ [], [], [], [], [], [], [], [], []],
-                    [ [], [], [], [], [p2], [], [], [], []]
+                    [ ["f"], [], [], [], [p2], [], [], [], ["f"]]
                        ]
 
-        self._player_turn = 2
+        self._not_player_turn = 2
 
-        self._player_1_fence = 10
+        self._game_won = False
 
-        self._player_2_fence = 10
+        self._player_1_fence_count = 10
+
+        self._player_2_fence_count = 10
 
     def get_board(self):
         """ This method returns the board. It is mainly used for visually testing movements and may or may not be
         removed in the final version."""
         return self._board
 
-    def set_player_turn(self, change):
-        self._player_turn = change
-
-    def double_vert_jump(self, coordinates, i, count, player, op_player=None):
+    def double_vert_jump(self, coordinates, i, count, player, op_player=None): # Line_count = 18
 
         if player == 1:
             op_player = 2
@@ -53,10 +52,12 @@ class QuoridorGame:
             if coordinates == (i, count + 2) and op_player in self._board[count + 1][i] and "h" not in \
                     self._board[count + 2][i]:
 
-                self._player_turn = player
+                self._not_player_turn = player
 
                 self._board[coordinates[1]][coordinates[0]].append(player)
+
                 return True
+
             else:
                 self._board[count][i].append(player)
                 return False
@@ -67,15 +68,17 @@ class QuoridorGame:
             if coordinates == (i, count - 2) and op_player in self._board[count - 1][i] and "h" not in \
                     self._board[count - 2][i]:
 
-                self._player_turn = player
+                self._not_player_turn = player
 
                 self._board[coordinates[1]][coordinates[0]].append(player)
+
                 return True
+
             else:
                 self._board[count][i].append(player)
                 return False
 
-    def vertical_move(self, coordinates, i, count, player, op_player=None):
+    def vertical_move(self, coordinates, i, count, player, op_player=None): # Line_count = 22
 
         if player == 1:
             op_player = 2
@@ -84,41 +87,47 @@ class QuoridorGame:
             op_player = 1
 
         if coordinates == (i, count + 1) and op_player not in self._board[coordinates[1]][coordinates[0]] and \
-                "v" not in self._board[coordinates[1]][coordinates[0]]:
+                "h" not in self._board[coordinates[1]][coordinates[0]]:
 
-            self._player_turn = player
+            self._not_player_turn = player
 
             self._board[coordinates[1]][coordinates[0]].append(player)
+
             return True
 
         elif coordinates == (i, count - 1) and op_player not in self._board[coordinates[1]][coordinates[0]] and \
-                "v" not in self._board[coordinates[1]][coordinates[0]]:
+                "h" not in self._board[coordinates[1]][coordinates[0]]:
 
-            self._player_turn = player
+            self._not_player_turn = player
 
             self._board[coordinates[1]][coordinates[0]].append(player)
+
             return True
 
         elif coordinates == (i, count + 1) and op_player in self._board[coordinates[1]][coordinates[0]]:
             self._board[count][i].append(player)
+
             return False
 
         elif coordinates == (i, count - 1) and op_player in self._board[coordinates[1]][coordinates[0]]:
             self._board[count][i].append(player)
+
             return False
 
-        elif coordinates == (i, count + 1) and "v" in self._board[coordinates[1]][coordinates[0]]:
+        elif coordinates == (i, count + 1) and "h" in self._board[coordinates[1]][coordinates[0]]:
             self._board[count][i].append(player)
+
             return False
 
-        elif coordinates == (i, count - 1) and "v" in self._board[coordinates[1]][coordinates[0]]:
+        elif coordinates == (i, count - 1) and "h" in self._board[coordinates[1]][coordinates[0]]:
             self._board[count][i].append(player)
+
             return False
 
         elif coordinates == (i, count + 2) or coordinates == (i, count - 2):
             return self.double_vert_jump(coordinates, i, count, player)
 
-    def horizontal_move(self, coordinates, i, count, player, op_player=None):
+    def horizontal_move(self, coordinates, i, count, player, op_player=None): # Line_count = 21
 
         if player == 1:
             op_player = 2
@@ -127,30 +136,39 @@ class QuoridorGame:
             op_player = 1
 
         if coordinates == (i + 1, count) and op_player not in self._board[coordinates[1]][coordinates[0]] and \
-                "h" not in self._board[coordinates[1]][coordinates[0]]:
-            self._player_turn = player
+                "v" not in self._board[coordinates[1]][coordinates[0]]:
+
+            self._not_player_turn = player
+
             self._board[coordinates[1]][coordinates[0]].append(player)
+
             return True
 
         elif coordinates == (i - 1, count) and op_player not in self._board[coordinates[1]][coordinates[0]]\
-                and "h" not in self._board[coordinates[1]][coordinates[0]]:
-            self._player_turn = player
+                and "v" not in self._board[coordinates[1]][coordinates[0]]:
+
+            self._not_player_turn = player
+
             self._board[coordinates[1]][coordinates[0]].append(player)
+
             return True
 
         elif coordinates == (i - 1, count) and op_player in self._board[coordinates[1]][coordinates[0]]:
             self._board[count][i].append(player)
+
             return False
 
-        elif coordinates == (i + 1, count) and "h" in self._board[coordinates[1]][coordinates[0]]:
+        elif coordinates == (i + 1, count) and "v" in self._board[coordinates[1]][coordinates[0]]:
             self._board[count][i].append(player)
+
             return False
 
-        elif coordinates == (i - 1, count) and "h" in self._board[coordinates[1]][coordinates[0]]:
+        elif coordinates == (i - 1, count) and "v" in self._board[coordinates[1]][coordinates[0]]:
             self._board[count][i].append(player)
+
             return False
 
-    def diag_move(self, coordinates, i, count, player, op_player=None):
+    def diagonal_move(self, coordinates, i, count, player, op_player=None): # Line_count = 26
         """" This potential method will communicate with the move_pawn method to allow for diagonal movements.
         This method exist because of the 20-25 line restriction. The coordinates accepted in the method will be
         for diagonal movements while the move pawn method allows for horizontal and vertical movements. This an
@@ -165,17 +183,17 @@ class QuoridorGame:
             op_player = 2
 
             if coordinates == (i - 1, count + 1) and op_player in self._board[count + 1][i] \
-                    and "h" in self._board[count + 2][i]:
+                    and "h" in self._board[count + 2][i] and "h" not in self._board[coordinates[1]][coordinates[0]]:
 
-                self._player_turn = player
+                self._not_player_turn = player
 
                 self._board[coordinates[1]][coordinates[0]].append(player)
                 return True
 
             elif coordinates == (i + 1, count + 1) and op_player in self._board[count + 1][i] \
-                    and "h" in self._board[count + 2][i]:
+                    and "h" in self._board[count + 2][i] and "h" not in self._board[coordinates[1]][coordinates[0]]:
 
-                self._player_turn = player
+                self._not_player_turn = player
 
                 self._board[coordinates[1]][coordinates[0]].append(player)
                 return True
@@ -188,17 +206,17 @@ class QuoridorGame:
             op_player = 1
 
             if coordinates == (i - 1, count - 1) and op_player in self._board[count - 1][i] \
-                    and "h" in self._board[count - 2][i]:
+                    and "h" in self._board[count - 2][i] and "h" not in self._board[coordinates[1]][coordinates[0]]:
 
-                self._player_turn = player
+                self._not_player_turn = player
 
                 self._board[coordinates[1]][coordinates[0]].append(player)
                 return True
 
             elif coordinates == (i + 1, count - 1) and op_player in self._board[count - 1][i] \
-                    and "h" in self._board[count - 2][i]:
+                    and "h" in self._board[count - 2][i] and "h" not in self._board[coordinates[1]][coordinates[0]]:
 
-                self._player_turn = player
+                self._not_player_turn = player
 
                 self._board[coordinates[1]][coordinates[0]].append(player)
                 return True
@@ -207,7 +225,7 @@ class QuoridorGame:
                 self._board[count][i].append(player)
                 return False
 
-    def move_pawn(self, player, coordinates):
+    def move_pawn(self, player, coordinates): # Line_count = 25
         """ This method takes in two different parameters that allows for the movement of a player piece. The player
         pieces are represented by the integers 1 and 2. The coordinate parameter allows for exact movement as long as
         the movement is allowable. This is technically a second step. We need to have the players move about the boards.
@@ -222,9 +240,10 @@ class QuoridorGame:
              variables var1 and count. It will then only allow for horizontal and vertical 
              movements by restrictive if statements and will return false if they are violated. """
 
-        var1 = 0
+        row = 0
         count = 0
-        if player == self._player_turn:
+        if player == self._not_player_turn or self._game_won is True:
+
             return False
 
         else:
@@ -233,7 +252,7 @@ class QuoridorGame:
 
                 while count != 9:
 
-                    for i, c in enumerate(self._board[var1]):
+                    for i, c in enumerate(self._board[row]):
 
                         if player in c:
 
@@ -243,7 +262,9 @@ class QuoridorGame:
                             self._board[count][i] = []
 
                             if 9 in coordinates or -1 in coordinates:
+
                                 self._board[count][i].append(player)
+
                                 return False
 
                             elif coordinates == (i, count + 1) or \
@@ -259,17 +280,18 @@ class QuoridorGame:
 
                             elif coordinates == (i - 1, count + 1) or coordinates == (i + 1, count + 1) or \
                                     coordinates == (i - 1, count - 1) or coordinates == (i + 1, count - 1):
-                                return self.diag_move(coordinates, i, count, player)
+                                return self.diagonal_move(coordinates, i, count, player)
 
                             else:
                                 self._board[count][i].append(player)
                                 return False
 
                         if i == 8:
-                            var1 += 1
+                            row += 1
                             count += 1
 
-    def place_fence(self, player, position, coordinates):
+    def place_fence(self, player, position, coordinates): # Line_count = 25
+
         """ This method allows for the player to place a fence on the board. It takes in three parameters and the places
         the position letter in the specified list. This is connected with the second step as the player can switch
         between moving or not."""
@@ -285,51 +307,57 @@ class QuoridorGame:
         Like the method above this method reliant on an honor system and so the players will use it depending on their
          judgement of their upcoming turn."""
 
-        op_player = None
+        if player == self._not_player_turn or self._game_won is True:
 
-        if player == 1:
+            return False
 
-            op_player = 2
+        else:
 
-            if position not in self._board[coordinates[1]][coordinates[0]]:
+            if player == 1:
 
-                self._player_1_fence -= 1
+                if self._player_1_fence_count == 0 or coordinates[1] < 0 or coordinates[1] >= 9 or \
+                        coordinates[0] < 0 or coordinates[0] >= 9:
 
-                self._player_turn = player
+                    return False
 
-                self._board[coordinates[1]][coordinates[0]].append(position)
+                elif position not in self._board[coordinates[1]][coordinates[0]] and "f" not in \
+                        self._board[coordinates[1]][coordinates[0]]:
 
-                return True
+                    self._player_1_fence_count -= 1
 
-            elif position in self._board[coordinates[1]][coordinates[0]]:
+                    self._not_player_turn = player
 
-                return False
+                    self._board[coordinates[1]][coordinates[0]].append(position)
 
-            elif self._player_1_fence == 0:
+                    return True
 
-                return False
+                elif position in self._board[coordinates[1]][coordinates[0]] or "f" in \
+                        self._board[coordinates[1]][coordinates[0]]:
 
-        elif player == 2:
+                    return False
 
-            op_player = 1
+            elif player == 2:
 
-            if position not in self._board[coordinates[1]][coordinates[0]]:
+                if self._player_2_fence_count == 0 or coordinates[1] < 0 or coordinates[1] >= 9 or \
+                        coordinates[0] < 0 or coordinates[0] >= 9:
 
-                self._player_2_fence -= 1
+                    return False
 
-                self._player_turn = player
+                elif position not in self._board[coordinates[1]][coordinates[0]] and "f" not in \
+                        self._board[coordinates[1]][coordinates[0]]:
 
-                self._board[coordinates[1]][coordinates[0]].append(position)
+                    self._player_2_fence_count -= 1
 
-                return True
+                    self._not_player_turn = player
 
-            elif position in self._board[coordinates[1]][coordinates[0]]:
+                    self._board[coordinates[1]][coordinates[0]].append(position)
 
-                return False
+                    return True
 
-            elif self._player_2_fence == 0:
+                elif position in self._board[coordinates[1]][coordinates[0]] or "f" in \
+                        self._board[coordinates[1]][coordinates[0]]:
 
-                return False
+                    return False
 
     def is_winner(self, player):
 
@@ -347,6 +375,9 @@ class QuoridorGame:
             for pos in self._board[8]:
 
                 if player in pos:
+
+                    self._game_won = True
+
                     return True
 
             return False
@@ -356,6 +387,9 @@ class QuoridorGame:
             for pos in self._board[0]:
 
                 if player in pos:
+
+                    self._game_won = True
+
                     return True
 
             return False
@@ -365,16 +399,18 @@ class QuoridorGame:
 
 
 #var = QuoridorGame()
-# print(var.move_pawn(1, (4,1)))
-# #print(var.place_fence(2, "h", (5,1)))
-# #print(var.move_pawn(1, (5,1)))
-#print(var.move_pawn(2, (4,7)))
 #print(var.move_pawn(1, (4,1)))
-#print(var.move_pawn(2, (4,7)))
+#print(var.place_fence(1, "h", (4,9)))
+#print(var.move_pawn(1, (5,1)))
 #print(var.move_pawn(1, (4,2)))
-# print(var.move_pawn(1, (4,3)))
-# print(var.move_pawn(1, (4,6)))
-# print(var.move_pawn(2, (4,5)))
+#print(var.move_pawn(2, (4,7)))
+#print(var.move_pawn(1, (6,1)))
+#print(var.move_pawn(2, (4,6)))
+#print(var.move_pawn(1, (4,4)))
+#print(var.move_pawn(2, (4,5)))
+#print(var.place_fence(1, "h", (3,)))
+#print(var.place_fence(2, "h", (4,6)))
+#print(var.move_pawn(1, (3,5)))
 # print(var.move_pawn(1, (4,4)))
 # #print(var.place_fence(1, "h", (4,3)))
 # print(var.move_pawn(1, (4,6)))
