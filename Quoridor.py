@@ -373,3 +373,6 @@ class QuoridorGame:
             return False
 
 
+var = QuoridorGame()
+print(var.place_fence(1, "v", (1,8)))
+print(var.get_board())
