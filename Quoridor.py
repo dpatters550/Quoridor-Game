@@ -37,9 +37,10 @@ class QuoridorGame:
 
         self._player_2_fence_count = 10
 
-    def get_board(self):
-        """ This method returns the board."""
-        return self._board
+    def print_board(self):
+        """ This method prints the board."""
+        for i in range(len(self._board)):
+            print(self._board[i])
 
     def double_vert_jump(self, coordinates, i, count, player, op_player=None):
         """ This method allows for the player to jump over the opposite player as long as the necessary conditions are
@@ -284,6 +285,9 @@ class QuoridorGame:
                             row += 1
                             count += 1
 
+    def fair_play_check(self, p):
+        pass
+
     def place_fence(self, player, position, coordinates):
 
         """ This method allows for the player to place a fence on the board. It takes in three parameters and the places
@@ -373,6 +377,3 @@ class QuoridorGame:
             return False
 
 
-var = QuoridorGame()
-print(var.place_fence(1, "v", (1,8)))
-print(var.get_board())
