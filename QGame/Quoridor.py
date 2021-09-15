@@ -5,14 +5,14 @@
 # their start end, then the game is won.
 
 import pygame
-from .constants import BLACK, ROWS, RED, SQUARE_SIZE, GREY, COLS, WHITE, VERTICAL, HORIZONTAL, BROWN, BROWN2
+from .constants import ROWS, SQUARE_SIZE, GREY, COLS, WHITE, VERTICAL, HORIZONTAL, BROWN, BROWN2
 
 class QuoridorGame:
 
     """ This class is a blue print for the game called Quoridor and creates the necessary conditions for the game to
     be played."""
 
-    def __init__(self, p1="1", p2="2"): #
+    def __init__(self, p1="1", p2="2"):
         """ This init method creates a game board which is made up of lists. It has two parameters with default values
         set to 1 and 2. The board has the letter f in each of it's four corners so that no It also contains the the data members of player 1 fences and player 2 fences that tracks the
         amount of fences left for each respective player. The data member not player turn tracks the turn of the person
@@ -32,7 +32,7 @@ class QuoridorGame:
                     [ ["f"], [], [], [], [p2], [], [], [], ["f"]]
                        ]
 
-        self._not_player_turn = "2" #
+        self._not_player_turn = "2"
 
         self._game_won = False
 
@@ -40,40 +40,11 @@ class QuoridorGame:
 
         self._player_2_fence_count = 10
 
-        self._selected = None
-
-    # def select(self, player, coordinates): # parameters will need to be fixed 10:04 in tim's video
-    #     if self._selected:
-    #         result = self.move_pawn(player, coordinates) # parameters will need to be fixed
-    #         if not result:
-    #             self._selected = None
-    #             self.select(player, coordinates)
-    #
-    #     piece = self.get_piece([coordinates[1]],[coordinates[0]])
-    #     if piece != [] and self._not_player_turn != player:
-    #         self._selected = piece
-            # self.valid_moves = self._board.get_valid_pieces(piece)
-
-    def select(self, player, coordinates):
-        return self.move_pawn(player, coordinates)
-        #if self.move_pawn is True:
-
-
     def draw_squares(self, win):
         win.fill(BROWN)
         for row in range(ROWS):
             for col in range(row % 2, ROWS, 2):
                 pygame.draw.rect(win, BROWN2, (row * SQUARE_SIZE, col * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 5)
-
-    # def highlight(self, win):
-    #     self.draw_squares(win)
-    #     radius = SQUARE_SIZE // 2 - 15
-    #     for row in range(ROWS):
-    #         for col in range(COLS):
-    #             piece = self._board[row][col]
-    #             if self.move_pawn() is True:
-    #                 # draw blue dot
-    #                 pass
 
     def draw(self, win):
         self.draw_squares(win)
@@ -107,9 +78,6 @@ class QuoridorGame:
         elif self._not_player_turn == "2":
             return "1"
 
-    # def calc_position(self):
-    #     self._x = SQUARE_SIZE *
-
     def print_board(self):
         """ This method prints the board."""
         for i in range(len(self._board)):
@@ -119,8 +87,8 @@ class QuoridorGame:
         """ This method allows for the player to jump over the opposite player as long as the necessary conditions are
         met. It is called by the move pawn method as long as the necessary coordinates are put in."""
 
-        if player == "1": #
-            op_player = "2" #
+        if player == "1":
+            op_player = "2"
 
             if coordinates == (i, count + 2) and op_player in self._board[count + 1][i] and "h" not in \
                     self._board[count + 2][i] and "h" not in self._board[count + 1][i]:
@@ -135,8 +103,8 @@ class QuoridorGame:
                 self._board[count][i].append(player)
                 return False
 
-        elif player == "2": #
-            op_player = "1" #
+        elif player == "2":
+            op_player = "1"
 
             if coordinates == (i, count - 2) and op_player in self._board[count - 1][i] and "h" not in \
                     self._board[count - 1][i] and "h" not in self._board[count][i]:
@@ -156,11 +124,11 @@ class QuoridorGame:
         at a time. This method is called by the move pawn method.
         """
 
-        if player == "1": #
-            op_player = "2" #
+        if player == "1":
+            op_player = "2"
 
-        elif player == "2": #
-            op_player = "1" #
+        elif player == "2":
+            op_player = "1"
 
         if coordinates == (i, count + 1) and op_player not in self._board[coordinates[1]][coordinates[0]] and \
                 "h" not in self._board[coordinates[1]][coordinates[0]]:
@@ -209,11 +177,11 @@ class QuoridorGame:
                 at a time. This method is called by the move pawn method.
                 """
 
-        if player == "1": #
-            op_player = "2" #
+        if player == "1":
+            op_player = "2"
 
-        elif player == "2": #
-            op_player = "1" #
+        elif player == "2":
+            op_player = "1"
 
         if coordinates == (i + 1, count) and op_player not in self._board[coordinates[1]][coordinates[0]] and \
                 "v" not in self._board[coordinates[1]][coordinates[0]]:
@@ -258,8 +226,8 @@ class QuoridorGame:
          in the method will allow for the player to diagonally as long as the necessary conditions are met.
         """
 
-        if player == "1": #
-            op_player = "2" #
+        if player == "1":
+            op_player = "2"
 
             if coordinates == (i - 1, count + 1) and op_player in self._board[count + 1][i] \
                     and "h" in self._board[count + 2][i] and "h" not in self._board[coordinates[1]][coordinates[0]]:
@@ -281,8 +249,8 @@ class QuoridorGame:
                 self._board[count][i].append(player)
                 return False
 
-        elif player == "2": #
-            op_player = "1" #
+        elif player == "2":
+            op_player = "1"
 
             if coordinates == (i - 1, count - 1) and op_player in self._board[count - 1][i] \
                     and "h" in self._board[count - 1][i] and "h" not in self._board[count][i - 1]:
@@ -319,7 +287,7 @@ class QuoridorGame:
 
         else:
 
-            if player == "1" or player == "2": #
+            if player == "1" or player == "2":
 
                 while count != 9:
 
@@ -373,7 +341,7 @@ class QuoridorGame:
 
         else:
 
-            if player == "1": #
+            if player == "1":
 
                 if self._player_1_fence_count == 0 or coordinates[1] < 0 or coordinates[1] >= 9 or \
                         coordinates[0] < 0 or coordinates[0] >= 9:
@@ -396,7 +364,7 @@ class QuoridorGame:
 
                     return False
 
-            elif player == "2": #
+            elif player == "2":
 
                 if self._player_2_fence_count == 0 or coordinates[1] < 0 or coordinates[1] >= 9 or \
                         coordinates[0] < 0 or coordinates[0] >= 9:
@@ -425,7 +393,7 @@ class QuoridorGame:
         position necessary for a win then the method will return true. It will also change the game won data member
         which will end the game."""
 
-        if player == "1": #
+        if player == "1":
 
             for pos in self._board[8]:
 
@@ -437,7 +405,7 @@ class QuoridorGame:
 
             return False
 
-        elif player == "2": #
+        elif player == "2":
 
             for pos in self._board[0]:
 
@@ -448,15 +416,3 @@ class QuoridorGame:
                     return True
 
             return False
-
-# e = Entry(root, width=35, borderwidth=5)
-#
-# e.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
-#
-# #e.insert(0, "what is your coordinates: ")
-#
-#
-# mybutton = Button(root, command=myClick)
-#
-# for i in mybutton:
-#     i.grid()
